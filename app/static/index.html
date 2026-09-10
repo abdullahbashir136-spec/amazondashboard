@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1420">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lead Finder">
+<title>FBA Lead Finder</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📦</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <h1>📦 FBA Lead Finder</h1>
+    <span class="mode-pill" id="modePill" hidden></span>
+  </div>
+</header>
+
+<main>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="panel">
+    <button class="disclosure" id="filtersToggle" aria-expanded="true" aria-controls="searchForm">
+      <span>Search filters</span>
+      <span class="chev" aria-hidden="true">▾</span>
+    </button>
+
+    <form id="searchForm" class="filters">
+      <div class="grid">
+
+        <fieldset>
+          <legend>Sales rank</legend>
+          <div class="pair">
+            <!-- step="any" throughout: native step validation anchors to `min`, so a
+                 `min="1" step="1000"` field rejects 1000 as invalid and silently
+                 blocks form submission. These are free-entry values, not increments. -->
+            <label>Min <input type="number" name="min_sales_rank" value="1000" min="1" step="any"></label>
+            <label>Max <input type="number" name="max_sales_rank" value="100000" min="1" step="any"></label>
+          </div>
+          <p class="hint">Lower rank = sells faster. 1k–100k is the usual private-label window.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Price (USD)</legend>
+          <div class="pair">
+            <label>Min <input type="number" name="min_price" value="15" min="0" step="any"></label>
+            <label>Max <input type="number" name="max_price" value="70" min="0" step="any"></label>
+          </div>
+          <p class="hint">Under $15 rarely survives fees; over $70 ties up cash.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Competition</legend>
+          <div class="pair">
+            <label>Max offers <input type="number" name="max_offer_count" value="10" min="1" step="any"></label>
+            <label>Max reviews <input type="number" name="max_review_count" value="500" min="0" step="any"></label>
+          </div>
+          <p class="hint">Fewer sellers and fewer reviews mean an easier listing to enter.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Quality &amp; category</legend>
+          <div class="pair">
+            <label>Min rating <input type="number" name="min_rating" value="4.0" min="0" max="5" step="any"></label>
+            <label>Category <input type="text" name="category" placeholder="e.g. Home &amp; Kitchen"></label>
+          </div>
+          <p class="hint">Leave category blank to search everything.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Sourcing targets</legend>
+          <div class="pair">
+            <label>Target ROI % <input type="number" name="target_roi" value="50" min="1" step="any"></label>
+            <label>Order qty <input type="number" name="target_quantity" value="500" min="1" step="any"></label>
+          </div>
+          <p class="hint">ROI sets the ceiling price used in every supplier draft.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>Results</legend>
+          <div class="pair">
+            <label>Limit <input type="number" name="limit" value="25" min="1" max="100" step="any"></label>
+          </div>
+          <p class="hint">Each result costs Keepa tokens — keep this tight.</p>
+        </fieldset>
+
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="primary" id="runBtn">Run Search</button>
+        <button type="button" class="ghost" id="resetBtn">Reset</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="status" class="status" hidden></section>
+
+  <section id="summary" class="summary" hidden></section>
+
+  <section id="results" class="results"></section>
+
+</main>
+
+<footer>
+  <p>
+    Data via the <a href="https://keepa.com/#!api" target="_blank" rel="noopener">official Keepa API</a>.
+    No scraping of Amazon, Keepa, SellerAmp, or Alibaba.
+  </p>
+  <p class="fine">
+    Fee figures are <strong>estimates</strong>, not authoritative. Verify against
+    <a href="https://sell.amazon.com/pricing" target="_blank" rel="noopener">Amazon's fee schedule</a>
+    before committing money. This tool drafts text for you to review — it never contacts a supplier or spends anything.
+  </p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

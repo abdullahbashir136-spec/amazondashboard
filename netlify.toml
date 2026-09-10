@@ -1,0 +1,33 @@
+# Netlify hosts the FRONTEND ONLY, as a static preview.
+#
+# Netlify cannot run this project's Python backend, so a Netlify deploy serves
+# the dashboard in "preview mode": it falls back to the bundled demo-data.json
+# and shows a persistent banner saying so. No Keepa key is involved and none is
+# ever needed here — there is no server-side code in this deploy.
+#
+# For live Keepa data, deploy the FastAPI service (see README: Render), then set
+# API_BASE at the top of app/static/app.js to that service's URL.
+#
+# The build assembles a dist/ folder containing only frontend assets, so the
+# Python source isn't served as static files.
+
+[build]
+  publish = "dist"
+  command = """
+    mkdir -p dist/static && \
+    cp app/static/index.html dist/index.html && \
+    cp app/static/style.css app/static/app.js app/static/demo-data.json dist/static/
+  """
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Long-lived caching would serve stale JS after a redeploy; these files are tiny.
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
